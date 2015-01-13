@@ -1,7 +1,7 @@
 #Basket of Jobs
 ###A one stop shop for job search.
 
-You can visit the [Github repo](http://github.com/horaciochavez/job_basket) and [live project](http://basketofjobs.org)
+You can visit [more projects](http://h6c5.com/projects) and a [live project](http://basketofjobs.org).
 
 ##What is this web app for?
 ####Job search for the Turing School community.
