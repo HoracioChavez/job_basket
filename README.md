@@ -75,8 +75,6 @@ Go to the turing "gear" on the top right corner and click it! Now, click again i
 
 As you probably have a few options, now it's time to navigate each one. Once you find something interesting, you can "Favorite" that job. 
 
-![](http://h6c5.com//system/pictures/images/000/000/032/original/Screen_Shot_2015-01-09_at_9.11.05_PM.png?1420859569)
-
 ##The team.
 #### Cool people develop cool products.
 
