@@ -65,7 +65,6 @@ GITHUB_SECRET: 'xxxxxxxxxxxxxxxxxxxxxxxxxx'
 
 Running this app should be really straight forward. Just run your favorite server. This time, I'll use `unicorn`, and you should see something like this. 
 
-![](http://h6c5.com//system/pictures/images/000/000/027/original/Screen_Shot_2015-01-09_at_1.01.55_PM.png?1420830159)
 
 ## How to enjoy the Basket of Jobs.
 #### Search for cool jobs, track them and got your favorite!
