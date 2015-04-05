@@ -6,7 +6,7 @@ RSpec.describe 'A user favoriting jobs', type: :feature do
 
   context 'favoriting a job' do
     it 'can find the favorite button' do
-      login
+   `   login
       click_link("Jobs")
       within("#job_1") do
         expect(page).to have_button("Favorite")
