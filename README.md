@@ -1,9 +1,9 @@
 <br>
 This is a one stop shop for jobs designed for the Turing School students and Alumni. This community will have a set of tools available to track where they are in the job process and do research about different job prospects.   
 
-Students and  Alumni can add data about different companies, including info about their location, size and if they are hiring developers at the time.    
+Students and Alumni can add data about different companies, including info about their location, size and if they are hiring developers at the time.    
 
-This project was developed as a team  by <a href='https://github.com/tanmdoan' target='_blank'>Tan Doan</a>, <a href='https://github.com/GusVilla303' target='_blank’>Gustavo Villagrana</a>, <a href='https://github.com/BobGu' target='_blank’>Robert Gu</a> and <a href='https://github.com/HoracioChavez' target='_blank’>Horacio Chavez</a> as part of the <a href='http://turing.io' target='_blank'> Turing School</a> Curriculum. We pair almost exclusively. This project is currently not maintained.   
+This project was developed pairing almost exclusively by <a href='https://github.com/BobGu' target='_blank'>Robert Gu</a>, <a href='https://github.com/GusVilla303' target='_blank'>Gustavo Villagrana</a>, <a href='https://github.com/tanmdoan' target='_blank'>Tan Doan</a>, and <a href='https://github.com/HoracioChavez' target='_blank'>Horacio Chavez</a> as part of the <a href='http://turing.io' target='_blank'> Turing School</a> Curriculum. We pair almost exclusively. This project is currently not maintained.   
 
 This was a greenfield project, but the plans for this are to be a legacy project for the future Turing students to improve on.  
 
