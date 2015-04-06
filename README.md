@@ -7,13 +7,13 @@ This project was developed pairing almost exclusively by <a href='https://github
 
 This was a greenfield project, but the plans for this are to be a legacy project for the future Turing students to improve on.  
 
-**<a href='https://github.com/HoracioChavez/job_basket' target='_blank'>Github repo</a> | <a href='http://basketofjobs.org' target='_blank'>Production Site</a>**
+**<a href='http://basketofjobs.org' target='_blank'>Production Site</a>**
 
 ## Features. 
 
 To use *Basket of Jobs* it is required to be part of the Turing School community on Github.
 
-**Login with Github**
+**Login with Github**  
 If you are publicly part of the Turing School Github group, create an account and login with Github is really easy. 
 
 ![](http://h6c5.com/system/pictures/avatars/000/000/048/original/Screen_Shot_2015-04-05_at_6.01.32_PM.png?1428274941)
@@ -51,30 +51,131 @@ By clicking in the company name, you can find all the registered jobs for that c
 ![Company View](http://h6c5.com/system/pictures/avatars/000/000/045/original/Screen_Shot_2015-04-05_at_5.48.57_PM.png?1428274169)
 ###### Publish news about a company to everyone in the community. 
 
-**Filter Jobs by Location or Type**
+**Filter Jobs by Location or Type**  
 If you are interested in an specific location, just click that location from the "location list", the same for the type of job. 
 ![Filters](http://h6c5.com/system/pictures/avatars/000/000/046/original/Screen_Shot_2015-04-05_at_5.51.15_PM.png?1428274588)
 ###### View jobs by type or location.
 
-**VPS**
+**VPS**  
 This project is hosted using an Ubuntu server on Digital Ocean.
 ![](http://h6c5.com/system/pictures/avatars/000/000/049/original/digital-ocean.png?1428275268)
 
 ## Interesting challenges.
 
-**Submit a form from another controller**
+**Submit a form from another controller**  
 We want to create news (comments according to the code) from the Company show view. This require an special approach to tell rails which controller are we going to use, and as News belong to an specific company, also to tel which company is that. 
 
-<script src="https://gist.github.com/HoracioChavez/321d3a0bef75061261e2.js"></script>
-<script src="https://gist.github.com/HoracioChavez/3d26eb795ef924938d11.js"></script>
-<script src="https://gist.github.com/HoracioChavez/55c3a9d980b539546bb5.js"></script>
+Comment.rb
+```ruby
+class Comment < ActiveRecord::Base
+  belongs_to :company
+end
+```
 
-**Save jobs from Github Job API**
+Company.rb
+```ruby
+class Company < ActiveRecord::Base
+  has_many :comments
+  # ...
+end
+```
+
+show.html.erb
+```HTML+ERB
+<%= form_for(@comment, url: comments_path(id: @company.id), html: { method: :post }) do |f| %>
+  <%= f.text_field :title %>
+  <%= f.text_area :content %>
+  <%= f.submit "Publish" %>
+<% end  %>
+```
+
+**Save jobs from Github Job API**  
 As a user, you should be able to type a 'Description', 'Location' and 'Job type' to retrieve Jobs from the Github API. 
 
-<script src="https://gist.github.com/HoracioChavez/67233277cc594e812b49.js"></script>
-<script src="https://gist.github.com/HoracioChavez/8c8faf67c26ecf66efc1.js"></script>
-<script src="https://gist.github.com/HoracioChavez/e6f1c876de5adad138e1.js"></script>
+new.html.erb
+```HTML+ERB
+<%= form_for @job, url: jobs_path do |f| %>
+  <%= f.text_field :description, id: "github_description" %>
+  <%= f.text_field :location, id: "github_location" %>
+  <%= f.text_field :job_type %>
+  <%= f.submit "Retrieve jobs from Github" %>
+<% end %>
+```
+
+github_job.rb
+```ruby
+class GithubJob < ActiveRecord::Base
+ 
+  def json_response
+    response  = Faraday.get("https://jobs.github.com/positions.json?#{options}")
+    get_json  = JSON.parse(response.body)
+  end
+ 
+  def job_builder(json_response)
+    json_response.each do |job|
+      unless Job.exists?(github_id: job["github_id"])
+        company = Company.find_or_create_by(name: job["company"])
+ 
+        new_job = company.jobs.new
+ 
+        new_job.title              = job["title"]
+        new_job.description        = job["description"]
+        new_job.company_id         = job["company_id"]
+        new_job.github_id          = job["github_id"]
+        new_job.github_created_at  = job["github_created_at"]
+        new_job.location           = job["location"]
+        new_job.job_type           = job["type"]
+        new_job.how_to_apply       = job["how_to_apply"]
+        new_job.company            = job["company"]
+        new_job.company_logo       = job["company_logo"]
+        new_job.github_url         = job["github_url"]
+        new_job.user_created       = false
+      end
+    end
+    company.save
+  end
+end
+```
+
+jobs_controller.rb
+
+```ruby
+class JobsController < AuthorizationController
+  
+  # ...
+ 
+  def create
+      description = params["job"]["description"]
+      location    = params["job"]["location"]
+      options     = "description=#{description}&location=#{location}"
+      response    = Faraday.get("https://jobs.github.com/positions.json?#{options}&client_id=#{ENV['GITHUB_KEY']}&client_secret=#{ENV['GITHUB_SECRET']}")
+      job         = Job.new
+      get_json    = JSON.parse(response.body)
+      job.job_builder(get_json)
+      @job = Job.create(job_params)
+      redirect_to jobs_path
+  end
+  
+  private
+ 
+  def job_params
+    params.require(:job).permit(:title,
+                                :description,
+                                :company_id,
+                                :github_id,
+                                :github_created_at,
+                                :location,
+                                :job_type,
+                                :how_to_apply,
+                                :company_name,
+                                :company_url,
+                                :company_logo,
+                                :github_url,
+                                :full_time)
+  end
+end
+```
+
 
 ## How to Install. 
 
@@ -83,7 +184,13 @@ This is a Ruby on Rails app with PostgreSQL. It's required to have them properly
 
 Run the next commands in your terminal.
 
-<script src="https://gist.github.com/HoracioChavez/d2ce8d041d2c3ee8a16d.js"></script>
+```shell
+git clone git@github.com:HoracioChavez/job_basket.git
+cd job_basket
+bundle
+figaro install 
+rake db:setup
+```
 
 Create your github credentials: You should create your own github credentials from "[Github Developer Applications](https://github.com/settings/applications)" to be able to use this app. 
 
@@ -92,7 +199,12 @@ Create your github credentials: You should create your own github credentials fr
 
 As we are using [Figaro](https://github.com/laserlemon/figaro), you should add those credentials to `config/application.yml` as follow:
 
-<script src="https://gist.github.com/HoracioChavez/c899733327e7694e714d.js"></script>
+```yml
+GITHUB_KEY:    'xxxxxxxxxx'
+GITHUB_SECRET: 'xxxxxxxxxxxxxxxxxxxxxxxxx'
+ 
+# Replace the 'xx..' with your own credentials, but please keep the quotes. 
+```
 
 Now, you are ready to go!
 
