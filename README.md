@@ -1,4 +1,3 @@
-<br>
 This is a one stop shop for jobs designed for the Turing School students and Alumni. This community will have a set of tools available to track where they are in the job process and do research about different job prospects.   
 
 Students and Alumni can add data about different companies, including info about their location, size and if they are hiring developers at the time.    
